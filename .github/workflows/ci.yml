@@ -36,6 +36,7 @@ jobs:
       - name: Lint Helm charts
         run: |
           for chart in charts/*/; do
+            [ -d "$chart" ] || continue
             echo "--- Linting $chart ---"
             helm lint "$chart"
           done
@@ -57,6 +58,7 @@ jobs:
       - name: Validate rendered Helm templates
         run: |
           for chart in charts/*/; do
+            [ -d "$chart" ] || continue
             echo "--- Validating rendered templates: $chart ---"
             helm template "$chart" | kubeconform \
               -kubernetes-version 1.32.0 \
