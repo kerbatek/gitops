@@ -15,6 +15,9 @@ spec:
       valuesObject:
         global:
           domain: argocd.internal
+        configs:
+          cm:
+            timeout.reconciliation: 30s
         server:
           ingress:
             enabled: false
