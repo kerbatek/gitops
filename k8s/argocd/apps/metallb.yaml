@@ -16,7 +16,7 @@ spec:
           speaker:
             tolerateMaster: true
     - repoURL: https://github.com/kerbatek/gitops.git
-      targetRevision: main
+      targetRevision: testing
       path: k8s/infra/metallb
   destination:
     server: https://kubernetes.default.svc
