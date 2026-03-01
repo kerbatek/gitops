@@ -7,28 +7,31 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  source:
-    repoURL: https://charts.longhorn.io
-    chart: longhorn
-    targetRevision: 1.7.2
-    helm:
-      valuesObject:
-        preUpgradeChecker:
-          jobEnabled: false
-        defaultSettings:
-          defaultReplicaCount: 3
-          storageOverProvisioningPercentage: 200
-          storageMinimalAvailablePercentage: 10
-        persistence:
-          defaultClass: true
-          defaultClassReplicaCount: 3
-        ingress:
-          enabled: false
-        csi:
-          attacherReplicaCount: 2
-          provisionerReplicaCount: 2
-          resizerReplicaCount: 2
-          snapshotterReplicaCount: 2
+  sources:
+    - repoURL: https://charts.longhorn.io
+      chart: longhorn
+      targetRevision: 1.7.2
+      helm:
+        valuesObject:
+          preUpgradeChecker:
+            jobEnabled: false
+          defaultSettings:
+            defaultReplicaCount: 3
+            storageOverProvisioningPercentage: 200
+            storageMinimalAvailablePercentage: 10
+          persistence:
+            defaultClass: true
+            defaultClassReplicaCount: 3
+          ingress:
+            enabled: false
+          csi:
+            attacherReplicaCount: 2
+            provisionerReplicaCount: 2
+            resizerReplicaCount: 2
+            snapshotterReplicaCount: 2
+    - repoURL: https://github.com/kerbatek/gitops.git
+      targetRevision: testing
+      path: k8s/infra/longhorn
   destination:
     server: https://kubernetes.default.svc
     namespace: longhorn-system
