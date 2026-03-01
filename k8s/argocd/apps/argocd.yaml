@@ -14,13 +14,20 @@ spec:
     helm:
       valuesObject:
         global:
-          domain: argocd.internal
+          domain: argocd.mrembiasz.pl
         configs:
           cm:
             timeout.reconciliation: 30s
+          params:
+            server.insecure: true
         server:
           ingress:
-            enabled: false
+            enabled: true
+            ingressClassName: nginx
+            hostname: argocd.mrembiasz.pl
+            tls: true
+            annotations:
+              cert-manager.io/cluster-issuer: letsencrypt-prod
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
