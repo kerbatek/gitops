@@ -30,7 +30,7 @@ spec:
             resizerReplicaCount: 2
             snapshotterReplicaCount: 2
     - repoURL: https://github.com/kerbatek/gitops.git
-      targetRevision: testing
+      targetRevision: main
       path: k8s/infra/longhorn
   destination:
     server: https://kubernetes.default.svc
