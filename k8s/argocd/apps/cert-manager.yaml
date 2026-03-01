@@ -16,7 +16,7 @@ spec:
           crds:
             enabled: true
     - repoURL: https://github.com/kerbatek/gitops.git
-      targetRevision: testing
+      targetRevision: main
       path: k8s/infra/cert-manager
   destination:
     server: https://kubernetes.default.svc
