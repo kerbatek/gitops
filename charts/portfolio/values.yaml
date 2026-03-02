@@ -1,0 +1,23 @@
+image:
+  repository: ghcr.io/kerbatek/portfolio
+  tag: latest
+  pullPolicy: Always
+
+replicas: 2
+
+containerPort: 80
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    cpu: 200m
+    memory: 128Mi
+
+ingress:
+  host: mrembiasz.pl
+  ingressClassName: nginx
+  tls:
+    secretName: portfolio-tls
+    clusterIssuer: letsencrypt-prod
