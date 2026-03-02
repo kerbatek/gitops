@@ -1,0 +1,6 @@
+apiVersion: v2
+name: portfolio
+description: Personal portfolio page
+type: application
+version: 0.1.0
+appVersion: sha-48e6313
