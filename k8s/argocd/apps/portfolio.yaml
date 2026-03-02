@@ -9,11 +9,13 @@ spec:
   project: default
   source:
     repoURL: https://github.com/kerbatek/gitops.git
-    targetRevision: testing
+    targetRevision: main
     path: charts/portfolio
     helm:
       valuesObject:
-        replicas: 2
+        replicas: 3
+        image:
+          tag: latest
   destination:
     server: https://kubernetes.default.svc
     namespace: portfolio
