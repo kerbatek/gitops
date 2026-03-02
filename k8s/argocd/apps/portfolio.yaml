@@ -15,7 +15,7 @@ spec:
       valuesObject:
         replicas: 3
         image:
-          tag: ""
+          tag: "sha-0d07571"
   destination:
     server: https://kubernetes.default.svc
     namespace: portfolio
