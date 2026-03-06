@@ -15,6 +15,7 @@ This directory contains Architecture Decision Records (ADRs) for the gitops repo
 | [ADR-0007](0007-longhorn-for-persistent-storage.md) | Longhorn for Persistent Storage | Accepted |
 | [ADR-0008](0008-kubeconform-ci-pipeline.md) | Kubeconform CI Pipeline for Manifest Validation | Accepted |
 | [ADR-0009](0009-portfolio-helm-chart-deployment.md) | Portfolio as Local Helm Chart Deployment | Accepted |
+| [ADR-0010](0010-filebrowser-for-file-sharing.md) | Filebrowser for File Sharing | Accepted |
 
 ## Creating a New ADR
 
