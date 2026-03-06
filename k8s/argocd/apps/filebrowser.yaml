@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/kerbatek/gitops.git
-    targetRevision: testing
+    targetRevision: main
     path: k8s/infra/filebrowser
   destination:
     server: https://kubernetes.default.svc
