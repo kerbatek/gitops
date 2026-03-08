@@ -4,6 +4,7 @@ metadata:
   name: portfolio
   namespace: argocd
 spec:
+  namespace: argocd
   writeBackConfig:
     method: "git:secret:argocd/git-creds"
   applicationRefs:
