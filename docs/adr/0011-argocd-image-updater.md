@@ -22,7 +22,7 @@ We will deploy **ArgoCD Image Updater** (v1.1.0, chart v1.1.1) as a pull-based i
 Key configuration:
 
 - **Deployment**: Helm chart `argocd-image-updater` from the argo-helm repo, deployed to the `argocd` namespace as a child Application
-- **Registry**: GHCR (`ghcr.io`) with credentials from `Secret argocd/ghcr-creds` (GitHub PAT with `read:packages` scope)
+- **Registry**: GHCR (`ghcr.io`) with credentials from `pullsecret:argocd/ghcr-creds` (docker-registry type secret, classic PAT with `read:packages` scope)
 - **Configuration model**: CRD-based — each tracked application is defined via an `ImageUpdater` custom resource in `k8s/infra/argocd-image-updater/`, deployed as a second source in the Image Updater's multi-source Application
 - **Update strategy**: `newest-build` — selects the most recently built image tag matching the allow-tags pattern
 - **Tag filter**: `regexp:^sha-[a-f0-9]+$` — matches the existing `sha-XXXXXXX` tagging convention
@@ -31,8 +31,8 @@ Key configuration:
 
 Required secrets (created manually, not stored in git):
 
-- `argocd/ghcr-creds`: GitHub PAT with `read:packages` scope (`creds` key, format `username:token`)
-- `argocd/git-creds`: GitHub PAT with repo write scope (`username` and `password` keys)
+- `argocd/ghcr-creds`: `kubernetes.io/dockerconfigjson` type secret (created via `kubectl create secret docker-registry`), classic GitHub PAT with `read:packages` scope. Fine-grained PATs do not work with GHCR's Docker v2 registry API.
+- `argocd/git-creds`: Opaque secret with `username` and `password` keys, classic GitHub PAT with `repo` scope. Fine-grained PATs do not work with Git HTTP push authentication.
 
 ## Consequences
 
