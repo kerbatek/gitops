@@ -24,7 +24,7 @@ spec:
                 credentials: pullsecret:argocd/ghcr-creds
                 defaultns: library
     - repoURL: https://github.com/kerbatek/gitops.git
-      targetRevision: testing
+      targetRevision: main
       path: k8s/infra/argocd-image-updater
   destination:
     server: https://kubernetes.default.svc
