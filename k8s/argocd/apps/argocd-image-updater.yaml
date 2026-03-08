@@ -21,7 +21,7 @@ spec:
                 api_url: https://ghcr.io
                 prefix: ghcr.io
                 ping: no
-                credentials: secret:argocd/ghcr-creds#creds
+                credentials: pullsecret:argocd/ghcr-creds
                 defaultns: library
     - repoURL: https://github.com/kerbatek/gitops.git
       targetRevision: testing
