@@ -5,12 +5,6 @@ metadata:
   namespace: argocd
   finalizers:
     - resources-finalizer.argocd.argoproj.io
-  annotations:
-    argocd-image-updater.argoproj.io/image-list: portfolio=ghcr.io/kerbatek/portfolio
-    argocd-image-updater.argoproj.io/portfolio.update-strategy: latest
-    argocd-image-updater.argoproj.io/portfolio.allow-tags: "regexp:^sha-[a-f0-9]+$"
-    argocd-image-updater.argoproj.io/portfolio.helm.image-tag: image.tag
-    argocd-image-updater.argoproj.io/write-back-method: "git:secret:argocd/git-creds"
 spec:
   project: default
   source:

@@ -23,10 +23,11 @@ Key configuration:
 
 - **Deployment**: Helm chart `argocd-image-updater` from the argo-helm repo, deployed to the `argocd` namespace as a child Application
 - **Registry**: GHCR (`ghcr.io`) with credentials from `Secret argocd/ghcr-creds` (GitHub PAT with `read:packages` scope)
-- **Update strategy**: `latest` — selects the most recently built image tag matching the allow-tags pattern
+- **Configuration model**: CRD-based — each tracked application is defined via an `ImageUpdater` custom resource in `k8s/infra/argocd-image-updater/`, deployed as a second source in the Image Updater's multi-source Application
+- **Update strategy**: `newest-build` — selects the most recently built image tag matching the allow-tags pattern
 - **Tag filter**: `regexp:^sha-[a-f0-9]+$` — matches the existing `sha-XXXXXXX` tagging convention
 - **Write-back method**: `git:secret:argocd/git-creds` — commits a `.argocd-source-<app>.yaml` parameter override file to the chart directory, preserving git as the single source of truth
-- **Application annotations**: Each managed Application declares its image list, update strategy, and tag filter via `argocd-image-updater.argoproj.io/*` annotations
+- **Helm integration**: `manifestTargets.helm` maps image name and tag to Helm values (`image.repository`, `image.tag`)
 
 Required secrets (created manually, not stored in git):
 
@@ -36,7 +37,7 @@ Required secrets (created manually, not stored in git):
 ## Consequences
 
 - Application repos no longer need write access to the gitops repo — they only push images to GHCR
-- Adding a new app to automated image promotion requires only annotations on its ArgoCD Application
+- Adding a new app to automated image promotion requires only a new `ImageUpdater` CR in `k8s/infra/argocd-image-updater/`
 - Git remains the single source of truth — write-back commits `.argocd-source-<app>.yaml` files that ArgoCD reads as Helm parameter overrides
 - Compatible with App of Apps self-heal — no `ignoreDifferences` workarounds needed
 - Introduces a new in-cluster component (Image Updater) that requires maintenance and monitoring

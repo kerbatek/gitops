@@ -7,22 +7,25 @@ metadata:
     - resources-finalizer.argocd.argoproj.io
 spec:
   project: default
-  source:
-    repoURL: https://argoproj.github.io/argo-helm
-    chart: argocd-image-updater
-    targetRevision: 1.1.1
-    helm:
-      valuesObject:
-        config:
-          git.user: argocd-image-updater
-          git.email: noreply@mrembiasz.pl
-          registries:
-            - name: GitHub Container Registry
-              api_url: https://ghcr.io
-              prefix: ghcr.io
-              ping: no
-              credentials: secret:argocd/ghcr-creds#creds
-              defaultns: library
+  sources:
+    - repoURL: https://argoproj.github.io/argo-helm
+      chart: argocd-image-updater
+      targetRevision: 1.1.1
+      helm:
+        valuesObject:
+          config:
+            git.user: argocd-image-updater
+            git.email: noreply@mrembiasz.pl
+            registries:
+              - name: GitHub Container Registry
+                api_url: https://ghcr.io
+                prefix: ghcr.io
+                ping: no
+                credentials: secret:argocd/ghcr-creds#creds
+                defaultns: library
+    - repoURL: https://github.com/kerbatek/gitops.git
+      targetRevision: testing
+      path: k8s/infra/argocd-image-updater
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
