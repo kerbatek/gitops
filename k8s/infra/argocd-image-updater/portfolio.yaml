@@ -1,0 +1,21 @@
+apiVersion: argocd-image-updater.argoproj.io/v1alpha1
+kind: ImageUpdater
+metadata:
+  name: portfolio
+  namespace: argocd
+spec:
+  namespace: argocd
+  writeBackConfig:
+    method: "git:secret:argocd/git-creds"
+  applicationRefs:
+    - namePattern: "portfolio"
+      images:
+        - alias: "portfolio"
+          imageName: "ghcr.io/kerbatek/portfolio"
+          commonUpdateSettings:
+            updateStrategy: "newest-build"
+            allowTags: "regexp:^sha-[a-f0-9]+$"
+          manifestTargets:
+            helm:
+              name: "image.repository"
+              tag: "image.tag"
