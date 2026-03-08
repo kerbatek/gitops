@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Accepted (image update mechanism superseded by [ADR-0011](0011-argocd-image-updater.md))
 
 ## Context
 
