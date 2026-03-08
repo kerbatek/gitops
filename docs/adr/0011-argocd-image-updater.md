@@ -33,7 +33,7 @@ Key configuration:
 Required secrets (created manually, not stored in git):
 
 - `argocd/ghcr-creds`: `kubernetes.io/dockerconfigjson` type secret (created via `kubectl create secret docker-registry`), classic GitHub PAT with `read:packages` scope. Fine-grained PATs do not work with GHCR's Docker v2 registry API.
-- `argocd/git-creds`: Opaque secret with `username` and `password` keys, classic GitHub PAT with `repo` scope. Fine-grained PATs do not work with Git HTTP push authentication.
+- `argocd/git-creds`: Opaque secret with `username` and `password` keys, fine-grained GitHub PAT scoped to the gitops repo with `Contents: Read and write` permission. Fine-grained PATs are preferred over classic PATs for their narrower scope (single repo vs. all repos with `repo` scope).
 
 ## Consequences
 
