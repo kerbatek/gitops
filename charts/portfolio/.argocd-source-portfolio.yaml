@@ -1,0 +1,8 @@
+helm:
+  parameters:
+  - name: image.repository
+    value: ghcr.io/kerbatek/portfolio
+    forcestring: true
+  - name: image.tag
+    value: sha-c2c5c11
+    forcestring: true
