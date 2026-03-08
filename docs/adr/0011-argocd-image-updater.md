@@ -28,6 +28,7 @@ Key configuration:
 - **Tag filter**: `regexp:^sha-[a-f0-9]+$` — matches the existing `sha-XXXXXXX` tagging convention
 - **Write-back method**: `git:secret:argocd/git-creds` — commits a `.argocd-source-<app>.yaml` parameter override file to the chart directory, preserving git as the single source of truth
 - **Helm integration**: `manifestTargets.helm` maps image name and tag to Helm values (`image.repository`, `image.tag`)
+- **Commit messages**: Custom template using Go `text/template` — follows the repo's conventional commit style (`chore: bump <app> image`) with a body listing each image change
 
 Required secrets (created manually, not stored in git):
 

@@ -16,6 +16,12 @@ spec:
           config:
             git.user: argocd-image-updater
             git.email: noreply@mrembiasz.pl
+            git.commit-message-template: |
+              chore: bump {{ .AppName }} image
+
+              {{ range .AppChanges -}}
+              updates {{ .Image }} from {{ .OldTag }} to {{ .NewTag }}
+              {{ end -}}
             registries:
               - name: GitHub Container Registry
                 api_url: https://ghcr.io
