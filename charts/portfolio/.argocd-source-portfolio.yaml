@@ -4,5 +4,5 @@ helm:
     value: ghcr.io/kerbatek/portfolio
     forcestring: true
   - name: image.tag
-    value: sha-909c80c
+    value: sha-e6801f1
     forcestring: true
