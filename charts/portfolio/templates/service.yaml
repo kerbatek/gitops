@@ -1,14 +1,3 @@
-apiVersion: v1
-kind: Service
-metadata:
-  name: {{ .Release.Name }}
-  labels:
-    app: {{ .Release.Name }}
-spec:
-  type: ClusterIP
-  selector:
-    app: {{ .Release.Name }}
-  ports:
-    - port: 80
-      targetPort: {{ .Values.containerPort }}
-      protocol: TCP
+{{- include "portfolio.service" (dict "root" . "component" "frontend" "values" .Values.frontend) }}
+---
+{{ include "portfolio.service" (dict "root" . "component" "backend" "values" .Values.backend) }}

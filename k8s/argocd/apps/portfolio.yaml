@@ -13,9 +13,10 @@ spec:
     path: charts/portfolio
     helm:
       valuesObject:
-        replicas: 3
-        image:
-          tag: "sha-4a8109d"
+        frontend:
+          replicas: 3
+        backend:
+          replicas: 3
   destination:
     server: https://kubernetes.default.svc
     namespace: portfolio
