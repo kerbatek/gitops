@@ -1,3 +1,3 @@
 {{- include "portfolio.deployment" (dict "root" . "component" "frontend" "values" .Values.frontend "probePath" "/") }}
 ---
-{{- include "portfolio.deployment" (dict "root" . "component" "backend" "values" .Values.backend "probePath" "/api/posts") }}
+{{ include "portfolio.deployment" (dict "root" . "component" "backend" "values" .Values.backend "probePath" "/api/posts") }}
