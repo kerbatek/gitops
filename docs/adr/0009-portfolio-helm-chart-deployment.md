@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (image update mechanism superseded by [ADR-0011](0011-argocd-image-updater.md))
+Accepted (image update mechanism superseded by [ADR-0011](0011-argocd-image-updater.md); single-container architecture superseded by [ADR-0012](0012-portfolio-split-frontend-backend.md))
 
 ## Context
 
