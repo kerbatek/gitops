@@ -9,7 +9,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/kerbatek/gitops.git
-    targetRevision: main
+    targetRevision: testing
     path: charts/portfolio
     helm:
       valuesObject:
