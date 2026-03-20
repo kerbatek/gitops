@@ -38,10 +38,21 @@ kubectl rollout restart deployment sealed-secrets-controller -n kube-system
 kubectl create secret generic <name> -n <namespace> \
   --from-literal=key=value \
   --dry-run=client -o yaml | \
-  kubeseal --format yaml > k8s/infra/<path>/<name>-sealed.yaml
+  kubeseal --format yaml > k8s/infra/secrets/<namespace>/<name>-sealed.yaml
 ```
 
 The resulting `SealedSecret` manifest is safe to commit to git, including public repositories.
+
+**Secret storage structure:**
+
+Sealed secrets are stored under `k8s/infra/secrets/` organised by namespace:
+```
+k8s/infra/secrets/
+  monitoring/
+    grafana-admin-sealed.yaml
+```
+
+A dedicated ArgoCD Application (`secrets`) watches this directory tree with `directory.recurse: true` and deploys all `SealedSecret` manifests. Each manifest carries its target namespace inside the encrypted payload, so the app uses `destination.namespace: default` as a fallback only.
 
 ## Consequences
 

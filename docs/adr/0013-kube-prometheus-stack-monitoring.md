@@ -22,12 +22,14 @@ We needed a solution that:
 We will deploy `kube-prometheus-stack` (chart version 82.10.4) from the `prometheus-community` Helm repository into the `monitoring` namespace.
 
 Key configuration choices:
-- **Grafana ingress**: Exposed at `grafana.mrembiasz.pl` via ingress-nginx with a Let's Encrypt TLS certificate managed by cert-manager
+- **Grafana ingress**: Exposed at `grafana.mrembiasz.pl` via ingress-nginx with a Let's Encrypt TLS certificate managed by cert-manager; restricted to `10.0.0.0/8` via `nginx.ingress.kubernetes.io/whitelist-source-range`
+- **Grafana admin credentials**: Loaded from a pre-existing `grafana-admin` Secret (managed by Sealed Secrets) via `grafana.admin.existingSecret` — prevents ArgoCD from regenerating a random password on every sync
 - **Prometheus retention**: 15 days, backed by a 20Gi Longhorn PVC (`ReadWriteOncePod`)
 - **Alertmanager storage**: 2Gi Longhorn PVC (`ReadWriteOncePod`) to persist silences and notification state across restarts
 - **Prune disabled** (`prune: false`): Prevents accidental deletion of CRDs and PVCs during ArgoCD sync
 - **ServerSideApply enabled**: Required to manage the large CRD schemas installed by the chart
 - **`ignoreDifferences` for CRDs**: The `caBundle` field and CRD status are managed by the cluster and drift on every sync; ignoring them prevents perpetual out-of-sync state
+- **`managedNamespaceMetadata`**: Sets `pod-security.kubernetes.io/enforce: privileged` on the `monitoring` namespace — required because node-exporter uses `hostNetwork`, `hostPID`, `hostPath` volumes, and `hostPort`, which are blocked by the `baseline` PodSecurity policy
 
 ## Consequences
 
