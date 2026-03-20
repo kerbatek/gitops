@@ -33,5 +33,5 @@ Key configuration choices:
 - Lightweight file access is available at `https://files.mrembiasz.pl` with minimal cluster overhead (requests: 50m CPU, 64Mi RAM).
 - Filebrowser is single-user-oriented by default; multi-user support exists but requires additional configuration.
 - The floating image tag (`v2`) should be pinned to a specific digest after initial deployment to ensure reproducibility.
-- Default credentials (`admin/admin`) must be changed immediately after first login.
+- Default credentials (`admin/admin`) must be changed immediately after first login. Credentials are stored in the SQLite database on the `filebrowser-db` PVC — not as a Kubernetes Secret — so they survive pod restarts but are not recoverable from git. If the PVC is lost, reset via `kubectl exec -n filebrowser deploy/filebrowser -- filebrowser users update admin --password <new>`.
 - No S3 API or desktop sync client support — files are accessible only via the web UI or WebDAV (if enabled in settings).

@@ -30,7 +30,7 @@ Key configuration:
 - **Helm integration**: `manifestTargets.helm` maps image name and tag to Helm values — per-component paths (e.g., `frontend.image.repository`, `frontend.image.tag`) for multi-service charts (see [ADR-0012](0012-portfolio-split-frontend-backend.md))
 - **Commit messages**: Custom template using Go `text/template` — follows the repo's conventional commit style (`chore: bump <app> image`) with a body listing each image change
 
-Required secrets (created manually, not stored in git):
+Required secrets (managed via Sealed Secrets — see [ADR-0014](0014-sealed-secrets-for-secret-management.md), stored at `k8s/infra/secrets/argocd/`):
 
 - `argocd/ghcr-creds`: `kubernetes.io/dockerconfigjson` type secret (created via `kubectl create secret docker-registry`), classic GitHub PAT with `read:packages` scope. Fine-grained PATs do not work with GHCR's Docker v2 registry API.
 - `argocd/git-creds`: Opaque secret with `username` and `password` keys, fine-grained GitHub PAT scoped to the gitops repo with `Contents: Read and write` permission. Fine-grained PATs are preferred over classic PATs for their narrower scope (single repo vs. all repos with `repo` scope).
@@ -42,5 +42,5 @@ Required secrets (created manually, not stored in git):
 - Git remains the single source of truth — write-back commits `.argocd-source-<app>.yaml` files that ArgoCD reads as Helm parameter overrides
 - Compatible with App of Apps self-heal — no `ignoreDifferences` workarounds needed
 - Introduces a new in-cluster component (Image Updater) that requires maintenance and monitoring
-- Two secrets must be managed out-of-band (`ghcr-creds`, `git-creds`)
+- Two secrets (`ghcr-creds`, `git-creds`) are managed via Sealed Secrets and stored encrypted in git under `k8s/infra/secrets/argocd/`
 - Replaces the push-model image bumping described in ADR-0009; the `chore: bump` workflow in app repos should be removed once Image Updater is operational
