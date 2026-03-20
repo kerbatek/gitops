@@ -52,7 +52,7 @@ k8s/infra/secrets/
     grafana-admin-sealed.yaml
 ```
 
-A dedicated ArgoCD Application (`secrets`) watches this directory tree with `directory.recurse: true` and deploys all `SealedSecret` manifests. Each manifest carries its target namespace inside the encrypted payload, so the app uses `destination.namespace: default` as a fallback only.
+A dedicated ArgoCD Application (`secrets`) watches this directory tree with `directory.recurse: true` and deploys all `SealedSecret` manifests. Each manifest explicitly sets its target namespace via `metadata.namespace`, so the app's `destination.namespace: default` is only used as a fallback for resources that omit a namespace (which these manifests do not).
 
 ## Consequences
 
