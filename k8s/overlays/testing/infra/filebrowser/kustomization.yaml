@@ -1,0 +1,14 @@
+resources:
+  - ../../../../infra/filebrowser
+
+patches:
+  - target:
+      kind: Ingress
+      name: filebrowser
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: files.testing.mrembiasz.pl
+      - op: replace
+        path: /spec/tls
+        value: []

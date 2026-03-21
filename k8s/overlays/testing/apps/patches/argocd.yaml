@@ -1,0 +1,15 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: argocd
+spec:
+  source:
+    helm:
+      valuesObject:
+        global:
+          domain: argocd.testing.mrembiasz.pl
+        server:
+          ingress:
+            hostname: argocd.testing.mrembiasz.pl
+            tls: false

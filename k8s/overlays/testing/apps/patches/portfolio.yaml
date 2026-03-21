@@ -1,0 +1,13 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: portfolio
+  namespace: argocd
+spec:
+  source:
+    targetRevision: testing
+    helm:
+      valuesObject:
+        ingress:
+          host: testing.mrembiasz.pl
+          tls: {}

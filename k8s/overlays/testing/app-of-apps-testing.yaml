@@ -10,7 +10,7 @@ spec:
   source:
     repoURL: https://github.com/kerbatek/gitops.git
     targetRevision: testing
-    path: k8s/argocd/apps
+    path: k8s/overlays/testing/apps
   destination:
     server: https://kubernetes.default.svc
     namespace: argocd
