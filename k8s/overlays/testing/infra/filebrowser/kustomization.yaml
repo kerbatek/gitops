@@ -12,3 +12,10 @@ patches:
       - op: replace
         path: /spec/tls
         value: []
+  - target:
+      kind: PersistentVolumeClaim
+      name: filebrowser-data
+    patch: |-
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: "2Gi"
