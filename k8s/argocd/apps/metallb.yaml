@@ -23,7 +23,7 @@ spec:
                         - key: node-role.kubernetes.io/control-plane
                           operator: DoesNotExist
     - repoURL: https://github.com/kerbatek/gitops.git
-      targetRevision: testing
+      targetRevision: main 
       path: k8s/infra/metallb
   destination:
     server: https://kubernetes.default.svc
