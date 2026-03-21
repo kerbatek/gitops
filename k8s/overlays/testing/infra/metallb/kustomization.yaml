@@ -1,0 +1,21 @@
+resources:
+  - ../../../../infra/metallb/config.yaml
+
+patches:
+  - target:
+      kind: IPAddressPool
+      name: main-pool
+    patch: |-
+      - op: replace
+        path: /spec/addresses/0
+        value: "10.1.129.0/26"
+  - target:
+      kind: BGPPeer
+      name: mikrotik
+    patch: |-
+      - op: replace
+        path: /spec/myASN
+        value: 64515
+      - op: replace
+        path: /spec/peerAddress
+        value: "10.0.216.1"

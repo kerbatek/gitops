@@ -1,0 +1,14 @@
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kube-prometheus-stack
+  namespace: argocd
+spec:
+  source:
+    helm:
+      valuesObject:
+        grafana:
+          ingress:
+            hosts:
+              - grafana.testing.mrembiasz.pl
+            tls: []
