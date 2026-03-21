@@ -20,7 +20,10 @@ jobs:
 
       - name: Validate Kubernetes manifests
         run: |
-          find k8s -name '*.yaml' -print0 | xargs -0 kubeconform \
+          find k8s -name '*.yaml' \
+            ! -name 'kustomization.yaml' \
+            ! -path '*/overlays/*/patches/*' \
+            -print0 | xargs -0 kubeconform \
             -kubernetes-version 1.32.0 \
             -schema-location default \
             -schema-location 'https://raw.githubusercontent.com/datreeio/CRDs-catalog/main/{{.Group}}/{{.ResourceKind}}_{{.ResourceAPIVersion}}.json' \
