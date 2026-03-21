@@ -14,5 +14,8 @@ patches:
       name: mikrotik
     patch: |-
       - op: replace
+        path: /spec/myASN
+        value: 64515
+      - op: replace
         path: /spec/peerAddress
         value: "10.0.216.1"
