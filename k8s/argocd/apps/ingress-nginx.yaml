@@ -16,7 +16,7 @@ spec:
         controller:
           kind: DaemonSet
           service:
-            loadBalancerIP: 10.0.216.1
+            loadBalancerIP: 10.1.128.1
             externalTrafficPolicy: Local
   destination:
     server: https://kubernetes.default.svc
