@@ -1,5 +1,4 @@
 resources:
-  - ../../../argocd/apps/argocd-image-updater.yaml
   - ../../../argocd/apps/argocd.yaml
   - ../../../argocd/apps/cert-manager.yaml
   - ../../../argocd/apps/filebrowser.yaml
