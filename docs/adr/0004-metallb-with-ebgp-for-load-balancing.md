@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted
+Superseded by [ADR-0016](0016-cilium-replaces-flannel-metallb-kube-proxy.md)
 
 ## Context
 

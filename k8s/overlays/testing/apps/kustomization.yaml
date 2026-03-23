@@ -5,7 +5,7 @@ resources:
   - ../../../argocd/apps/ingress-nginx.yaml
   - ../../../argocd/apps/kube-prometheus-stack.yaml
   - ../../../argocd/apps/longhorn.yaml
-  - ../../../argocd/apps/metallb.yaml
+  - ../../../argocd/apps/cilium.yaml
   - ../../../argocd/apps/portfolio.yaml
   - ../../../argocd/apps/sealed-secrets.yaml
   - ../../../argocd/apps/secrets.yaml
@@ -14,6 +14,6 @@ patches:
   - path: patches/argocd.yaml
   - path: patches/ingress-nginx.yaml
   - path: patches/kube-prometheus-stack.yaml
-  - path: patches/metallb.yaml
+  - path: patches/cilium.yaml
   - path: patches/filebrowser.yaml
   - path: patches/portfolio.yaml
