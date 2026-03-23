@@ -22,6 +22,9 @@ spec:
             enabled: true
           bpf:
             masquerade: true
+          routingMode: native
+          autoDirectNodeRoutes: true
+          ipv4NativeRoutingCIDR: "10.244.0.0/16"
           loadBalancer:
             mode: dsr
             algorithm: maglev
@@ -32,6 +35,28 @@ spec:
               enabled: true
             ui:
               enabled: false
+          cgroup:
+            autoMount:
+              enabled: false
+            hostRoot: /sys/fs/cgroup
+          securityContext:
+            capabilities:
+              ciliumAgent:
+                - CHOWN
+                - KILL
+                - NET_ADMIN
+                - NET_RAW
+                - IPC_LOCK
+                - SYS_ADMIN
+                - SYS_RESOURCE
+                - DAC_OVERRIDE
+                - FOWNER
+                - SETGID
+                - SETUID
+              cleanCiliumState:
+                - NET_ADMIN
+                - SYS_ADMIN
+                - SYS_RESOURCE
     - repoURL: https://github.com/kerbatek/gitops.git
       targetRevision: main
       path: k8s/infra/cilium

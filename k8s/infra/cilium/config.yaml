@@ -12,6 +12,8 @@ kind: CiliumBGPClusterConfig
 metadata:
   name: bgp-cluster-config
 spec:
+  nodeSelector:
+    matchLabels: {}
   bgpInstances:
     - name: main
       localASN: 64512
@@ -37,6 +39,8 @@ spec:
   families:
     - afi: ipv4
       safi: unicast
+      advertisements:
+        matchLabels: {}
 
 ---
 apiVersion: cilium.io/v2alpha1
