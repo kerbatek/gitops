@@ -78,4 +78,6 @@ Testing cluster first, production later. Cilium is bootstrapped via Helm CLI dur
 - **Migration risk**: Replacing the CNI requires a brief networking outage during the switchover — nodes must reboot to apply Talos config changes
 - **MikroTik dependency**: The router must be configured to accept both LoadBalancer IP and pod CIDR routes via BGP
 - **Cilium-specific CRDs**: BGP configuration now uses Cilium-specific CRDs rather than the more generic MetalLB CRDs
+- **CoreDNS upstream DNS**: Removing Flannel breaks CoreDNS's default `forward . /etc/resolv.conf` path because Talos's link-local DNS proxy (`169.254.116.108`) is no longer reachable. The CoreDNS ConfigMap must be overridden to forward directly to `1.1.1.1` / `8.8.8.8`. This is managed via `k8s/infra/cilium/coredns-configmap.yaml` and must be applied immediately after Cilium installation during migration
+- **Talos-specific Helm values**: Cilium on Talos requires `cgroup.autoMount.enabled=false`, `cgroup.hostRoot=/sys/fs/cgroup`, explicit `securityContext.capabilities`, and `routingMode=native` (DSR is incompatible with VXLAN tunneling)
 - **MetalLB on production**: Production retains MetalLB until the production migration is completed
