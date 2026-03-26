@@ -1,5 +1,6 @@
 resources:
   - ../../../../infra/cilium/config.yaml
+  - ../../../../infra/cilium/coredns-configmap.yaml
 
 patches:
   - target:
