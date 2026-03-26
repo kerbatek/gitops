@@ -1,0 +1,22 @@
+resources:
+  - ../../../../infra/cilium/config.yaml
+  - ../../../../infra/cilium/coredns-configmap.yaml
+
+patches:
+  - target:
+      kind: CiliumLoadBalancerIPPool
+      name: main-pool
+    patch: |-
+      - op: replace
+        path: /spec/blocks/0/cidr
+        value: "10.1.129.0/26"
+  - target:
+      kind: CiliumBGPClusterConfig
+      name: bgp-cluster-config
+    patch: |-
+      - op: replace
+        path: /spec/bgpInstances/0/localASN
+        value: 64515
+      - op: replace
+        path: /spec/bgpInstances/0/peers/0/peerAddress
+        value: "10.0.216.1"
