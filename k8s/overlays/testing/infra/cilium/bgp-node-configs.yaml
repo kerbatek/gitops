@@ -1,0 +1,112 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-testing-cp-1
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: testing-cp-1
+  bgpInstances:
+    - name: main
+      localASN: 65101
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.216.0"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-testing-cp-2
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: testing-cp-2
+  bgpInstances:
+    - name: main
+      localASN: 65102
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.216.2"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-testing-cp-3
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: testing-cp-3
+  bgpInstances:
+    - name: main
+      localASN: 65103
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.216.6"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-testing-worker-1
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: testing-worker-1
+  bgpInstances:
+    - name: main
+      localASN: 65104
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.216.8"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-testing-worker-2
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: testing-worker-2
+  bgpInstances:
+    - name: main
+      localASN: 65105
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.216.10"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-testing-worker-3
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: testing-worker-3
+  bgpInstances:
+    - name: main
+      localASN: 65106
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.216.12"
+          peerConfigRef:
+            name: mikrotik-peer-config

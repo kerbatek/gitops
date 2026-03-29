@@ -1,6 +1,8 @@
 resources:
   - ../../../../infra/cilium/config.yaml
   - ../../../../infra/cilium/coredns-configmap.yaml
+  - bgp-node-configs.yaml
+  - apiserver-vip.yaml
 
 patches:
   - target:
@@ -14,9 +16,8 @@ patches:
       kind: CiliumBGPClusterConfig
       name: bgp-cluster-config
     patch: |-
-      - op: replace
-        path: /spec/bgpInstances/0/localASN
-        value: 64515
-      - op: replace
-        path: /spec/bgpInstances/0/peers/0/peerAddress
-        value: "10.0.216.1"
+      $patch: delete
+      apiVersion: cilium.io/v2alpha1
+      kind: CiliumBGPClusterConfig
+      metadata:
+        name: bgp-cluster-config
