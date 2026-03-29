@@ -11,8 +11,8 @@ spec:
       helm:
         valuesObject:
           kubeProxyReplacement: true
-          k8sServiceHost: "10.0.216.5"
-          k8sServicePort: "6443"
+          k8sServiceHost: "localhost"
+          k8sServicePort: "7445"
           ipam:
             mode: kubernetes
           bgpControlPlane:

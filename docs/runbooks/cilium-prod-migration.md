@@ -32,7 +32,7 @@ Migrates production (`url-shortener`) from Flannel + MetalLB + kube-proxy to Cil
 
 The `testing` branch must be merged to `main` before migration. Verify these files are present on `main`:
 
-- `k8s/argocd/apps/cilium.yaml` — with prod values (`10.0.215.5`, `ipv4NativeRoutingCIDR: 10.245.0.0/16`)
+- `k8s/argocd/apps/cilium.yaml` — with prod values (`k8sServiceHost: localhost`, `k8sServicePort: 7445`, `ipv4NativeRoutingCIDR: 10.245.0.0/16`)
 - `k8s/infra/cilium/config.yaml` — BGP resources with prod values (ASN 64512, peer `10.0.215.1`, pool `10.1.128.0/26`)
 - `k8s/infra/cilium/coredns-configmap.yaml` — CoreDNS fix (critical)
 
@@ -182,8 +182,8 @@ helm repo add cilium https://helm.cilium.io/ && helm repo update
 helm install cilium cilium/cilium --version 1.17.1 \
   --namespace kube-system \
   --set kubeProxyReplacement=true \
-  --set k8sServiceHost=10.0.215.5 \
-  --set k8sServicePort=6443 \
+  --set k8sServiceHost=localhost \
+  --set k8sServicePort=7445 \
   --set ipam.mode=kubernetes \
   --set bgpControlPlane.enabled=true \
   --set bpf.masquerade=true \
@@ -203,6 +203,7 @@ helm install cilium cilium/cilium --version 1.17.1 \
 
 > `routingMode=native` is mandatory on Talos — DSR is incompatible with VXLAN tunneling.
 > `cgroup` and `securityContext` values are required by Talos's hardened security model.
+> `k8sServiceHost=localhost` + `k8sServicePort=7445` uses Talos kubePrism for strict HA API access from node-local components (no dependency on a single CP IP or on a Cilium-managed VIP during bootstrap).
 
 ### Step 7 — Wait for Cilium to be healthy
 

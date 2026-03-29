@@ -98,6 +98,7 @@ enable_bgp_vip    = true
 ### `k8s/overlays/testing/apps/patches/cilium.yaml`
 
 - Set `autoDirectNodeRoutes: false` (nodes are no longer on a shared L2 segment)
+- Set `k8sServiceHost: localhost` and `k8sServicePort: 7445` to use Talos kubePrism for strict HA API access from node-local Cilium components
 
 ### `k8s/overlays/testing/infra/cilium/kustomization.yaml`
 
@@ -132,6 +133,12 @@ During initial cluster bring-up, Cilium must be installed before the VIP becomes
 3. ArgoCD deploys Cilium (including the apiserver-vip Service and IP pool) via GitOps
 4. Once Cilium establishes BGP sessions, VIP `10.0.216.5` is advertised as a LoadBalancer IP
 5. Subsequent access uses the VIP
+
+### Recovery Hardening (2026-03-29)
+
+After etcd disaster recovery testing, Cilium startup proved sensitive to `k8sServiceHost` pointing at the Cilium-managed VIP itself.  
+To avoid control-plane bootstrap loops without introducing a single-node dependency, testing overlay now uses Talos kubePrism (`k8sServiceHost: localhost`, `k8sServicePort: 7445`) for Cilium's API access, while keeping the external client endpoint on VIP `10.0.216.5`.
+Also ensure `CiliumLoadBalancerIPPool` (`apiserver-vip-pool`) exists before creating/recreating the `apiserver-vip` Service, so IPAM allocates `10.0.216.5` instead of taking an address from `main-pool`.
 
 ---
 
