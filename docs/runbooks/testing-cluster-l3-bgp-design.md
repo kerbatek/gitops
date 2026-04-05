@@ -140,6 +140,49 @@ After etcd disaster recovery testing, Cilium startup proved sensitive to `k8sSer
 To avoid control-plane bootstrap loops without introducing a single-node dependency, testing overlay now uses Talos kubePrism (`k8sServiceHost: localhost`, `k8sServicePort: 7445`) for Cilium's API access, while keeping the external client endpoint on VIP `10.0.216.5`.
 Also ensure `CiliumLoadBalancerIPPool` (`apiserver-vip-pool`) exists before creating/recreating the `apiserver-vip` Service, so IPAM allocates `10.0.216.5` instead of taking an address from `main-pool`.
 
+### etcd Rejoin Recovery (2026-03-29)
+
+After a temporary single-node recovery on CP1 (`force-new-cluster`), CP2/CP3 cannot safely reuse old local etcd state.  
+If they boot with stale etcd metadata, they crash-loop with:
+
+`discovery failed: <member-id> found data inconsistency with peers`
+
+#### Why this restart/reset was required
+
+- `force-new-cluster` creates a new authoritative etcd view on CP1.
+- CP2/CP3 still had old etcd data on `EPHEMERAL`, tied to the pre-recovery cluster metadata.
+- etcd correctly refuses to join when local persisted metadata conflicts with current peers.
+- Result: Terraform/Talos health gates stall even if node networking and VM resources are correct.
+
+#### Correct fix (control planes only, not workers)
+
+1. Keep CP1 as the healthy seed member.
+2. Reset only `EPHEMERAL` on CP2 and CP3, then reboot:
+
+```bash
+talosctl --nodes 10.0.216.3 --endpoints 10.0.216.1 \
+  reset --graceful=false --reboot --system-labels-to-wipe EPHEMERAL
+
+talosctl --nodes 10.0.216.7 --endpoints 10.0.216.1 \
+  reset --graceful=false --reboot --system-labels-to-wipe EPHEMERAL
+```
+
+3. Wait for rejoin and verify:
+
+```bash
+talosctl --nodes 10.0.216.1 --endpoints 10.0.216.1 etcd members
+talosctl --nodes 10.0.216.1,10.0.216.3,10.0.216.7 \
+  --endpoints 10.0.216.1,10.0.216.3,10.0.216.7 \
+  health --server=false
+```
+
+Expected final state: all three members present with `LEARNER=false`, and Talos health passes.
+
+#### Post-recovery Terraform cleanup
+
+- Remove/disable `etcd_force_new_cluster_node` in environment config after recovery.
+- Apply kubeconfig endpoint drift fix if shown in plan (testing: `10.0.216.10 -> 10.0.216.1`).
+
 ---
 
 ## Out of Scope

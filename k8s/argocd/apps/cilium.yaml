@@ -23,7 +23,7 @@ spec:
           bpf:
             masquerade: true
           routingMode: native
-          autoDirectNodeRoutes: true
+          autoDirectNodeRoutes: false
           ipv4NativeRoutingCIDR: "10.245.0.0/16"
           loadBalancer:
             mode: dsr

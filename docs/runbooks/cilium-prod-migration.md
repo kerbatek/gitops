@@ -15,14 +15,14 @@ Migrates production (`url-shortener`) from Flannel + MetalLB + kube-proxy to Cil
 
 | | Production |
 |---|---|
-| Cluster VIP | `10.0.215.5:6443` |
-| MikroTik BGP peer | `10.0.215.1` |
-| Local ASN | `64512` |
+| Cluster VIP | `10.0.217.5:6443` |
+| MikroTik BGP peers | `10.0.217.0`, `10.0.217.2`, `10.0.217.6`, `10.0.217.8`, `10.0.217.10`, `10.0.217.12` |
+| Local ASNs | `65201–65206` |
 | Peer ASN | `64513` |
 | LB IP pool | `10.1.128.0/26` |
 | Pod CIDR | `10.245.0.0/16` |
-| CP nodes | `10.0.215.10–12` |
-| Worker nodes | `10.0.215.50–54` |
+| CP nodes | `10.0.217.1`, `10.0.217.3`, `10.0.217.7` |
+| Worker nodes | `10.0.217.9`, `10.0.217.11`, `10.0.217.13` |
 
 ---
 
@@ -56,10 +56,63 @@ pod_cidr      = "10.245.0.0/16"
 
 ### 1.3 MikroTik preparation
 
-Before migration, configure MikroTik to accept BGP peers from production nodes (ASN 64512):
-- Add BGP peer entries for each CP/worker IP (`10.0.215.10–12`, `10.0.215.50–54`) with `remote-as 64512`
-- Existing MetalLB BGP sessions (if any) can be left — they will stop advertising once MetalLB is removed
-- Pod CIDR routes (`10.245.x.0/24`) will appear per node once Cilium BGP is established
+Production now uses a routed `/31` design with **no overlap** with testing:
+- Testing VLANs: `2161–2166`
+- Production VLANs: `2171–2176`
+- Testing ASNs: `65101–65106`
+- Production ASNs: `65201–65206`
+
+Create six VLAN SVIs and six eBGP neighbors on MikroTik before the migration.
+
+> Replace `<TRUNK_IF>` with the interface or bridge that carries the production VLAN trunk on your router.
+> Do **not** create any SVI for VIP `10.0.217.5/32` — Cilium advertises that as a BGP `/32`.
+
+```routeros
+# RouterOS v7
+
+/interface vlan
+add name=prod-cp-1 interface=<TRUNK_IF> vlan-id=2171
+add name=prod-cp-2 interface=<TRUNK_IF> vlan-id=2172
+add name=prod-cp-3 interface=<TRUNK_IF> vlan-id=2173
+add name=prod-worker-1 interface=<TRUNK_IF> vlan-id=2174
+add name=prod-worker-2 interface=<TRUNK_IF> vlan-id=2175
+add name=prod-worker-3 interface=<TRUNK_IF> vlan-id=2176
+
+/ip address
+add address=10.0.217.0/31 interface=prod-cp-1
+add address=10.0.217.2/31 interface=prod-cp-2
+add address=10.0.217.6/31 interface=prod-cp-3
+add address=10.0.217.8/31 interface=prod-worker-1
+add address=10.0.217.10/31 interface=prod-worker-2
+add address=10.0.217.12/31 interface=prod-worker-3
+
+/routing/bgp/instance
+add name=prod-k8s as=64513
+
+/routing/bgp/connection
+add name=prod-cp-1 instance=prod-k8s local.role=ebgp \
+    local.address=10.0.217.0 remote.address=10.0.217.1 remote.as=65201
+add name=prod-cp-2 instance=prod-k8s local.role=ebgp \
+    local.address=10.0.217.2 remote.address=10.0.217.3 remote.as=65202
+add name=prod-cp-3 instance=prod-k8s local.role=ebgp \
+    local.address=10.0.217.6 remote.address=10.0.217.7 remote.as=65203
+add name=prod-worker-1 instance=prod-k8s local.role=ebgp \
+    local.address=10.0.217.8 remote.address=10.0.217.9 remote.as=65204
+add name=prod-worker-2 instance=prod-k8s local.role=ebgp \
+    local.address=10.0.217.10 remote.address=10.0.217.11 remote.as=65205
+add name=prod-worker-3 instance=prod-k8s local.role=ebgp \
+    local.address=10.0.217.12 remote.address=10.0.217.13 remote.as=65206
+```
+
+Quick verification on MikroTik before touching the cluster:
+
+```routeros
+/interface vlan print where name~"prod-"
+/ip address print where interface~"prod-"
+/routing/bgp/connection print where name~"prod-"
+```
+
+Existing MetalLB BGP sessions can be left in place before the cutover. They will stop advertising once MetalLB is removed. Pod CIDR routes (`10.245.x.0/24`) and the API VIP (`10.0.217.5/32`) will appear after Cilium BGP comes up.
 
 ### 1.4 Verify current cluster health
 
