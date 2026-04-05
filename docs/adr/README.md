@@ -22,6 +22,8 @@ This directory contains Architecture Decision Records (ADRs) for the gitops repo
 | [ADR-0014](0014-sealed-secrets-for-secret-management.md) | Sealed Secrets for Secret Management | Accepted |
 | [ADR-0015](0015-kustomize-overlays-for-testing-environment.md) | Kustomize Overlays for Testing Environment | Accepted |
 | [ADR-0016](0016-cilium-replaces-flannel-metallb-kube-proxy.md) | Cilium Replaces Flannel, MetalLB, and kube-proxy | Accepted |
+| [ADR-0017](0017-routed-31-per-node-bgp-topology.md) | Routed /31 Per-Node BGP Topology | Accepted |
+| [ADR-0018](0018-cilium-managed-api-vip-with-kubeprism.md) | Cilium-Managed API VIP with kubePrism | Accepted |
 
 ## Creating a New ADR
 
