@@ -13,6 +13,7 @@ Production tracks the `main` branch and syncs the child applications from `k8s/a
 Testing tracks the `testing` branch and builds the same application set through Kustomize overlays in `k8s/overlays/testing/apps/`.
 
 That setup keeps the base application definitions shared while allowing testing-specific overrides for domains, IPs, branch revisions, and selected infra manifests.
+Both environments now run on routed per-node `/31` links with Cilium BGP, while keeping VLANs, ASNs, and API VIPs disjoint between testing and production.
 
 ## Repository Layout
 
@@ -66,6 +67,9 @@ The current Argo CD application set includes:
 - Root app: `k8s/argocd/app-of-apps.yaml`
 - Child app source path: `k8s/argocd/apps`
 - Sync policy: automated with self-heal and prune on the root application
+- Cluster shape: 3 control planes and 3 workers
+- API access model: kubePrism on `localhost:7445` for node-local clients, Cilium-managed VIP `10.0.217.5/32` for external clients
+- Networking model: per-node `/31`, per-node VLAN, per-node eBGP peer, and Cilium `routingMode: native` with `autoDirectNodeRoutes: false`
 
 ### Testing
 
@@ -73,6 +77,8 @@ The current Argo CD application set includes:
 - Root app: `k8s/overlays/testing/app-of-apps-testing.yaml`
 - Child app source path: `k8s/overlays/testing/apps`
 - Overlay model: reuses base applications and patches branch revisions, domains, ingress IPs, and selected infra paths
+- API access model: kubePrism on `localhost:7445` for node-local clients, Cilium-managed VIP `10.0.216.5/32` for external clients
+- Networking model: mirrors the routed per-node `/31` production design with non-overlapping VLANs and ASNs
 
 Notable testing overrides currently include:
 
@@ -81,6 +87,7 @@ Notable testing overrides currently include:
 - Portfolio ingress changed to `testing.mrembiasz.pl`
 - Different Cilium API endpoint, pod CIDR, and infra path
 - Different ingress LoadBalancer IP
+- Different per-node VLAN range (`2161-2166`) and ASN range (`65101-65106`) from production (`2171-2176`, `65201-65206`)
 
 ## Portfolio Application
 
@@ -94,8 +101,3 @@ The portfolio workload is deployed from the local Helm chart in `charts/portfoli
 ## Documentation
 
 - [ADRs](docs/adr/README.md) explain the architectural decisions behind the platform
-- [Cilium production migration runbook](docs/runbooks/cilium-prod-migration.md) documents the Flannel/MetalLB to Cilium migration procedure
-
-## Notes
-
-The previous top-level documentation referenced MetalLB-centric architecture and older repository paths. The source of truth is now the Argo CD applications and overlays in `k8s/`, with ADRs and runbooks capturing the reasoning and operational details.
