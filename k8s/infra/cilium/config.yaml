@@ -10,17 +10,113 @@ spec:
 apiVersion: cilium.io/v2alpha1
 kind: CiliumBGPClusterConfig
 metadata:
-  name: bgp-cluster-config
+  name: bgp-url-shortener-cp-1
 spec:
   nodeSelector:
-    matchLabels: {}
+    matchLabels:
+      kubernetes.io/hostname: url-shortener-cp-1
   bgpInstances:
     - name: main
-      localASN: 64512
+      localASN: 65201
       peers:
         - name: mikrotik
           peerASN: 64513
-          peerAddress: "10.0.215.1"
+          peerAddress: "10.0.217.0"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-url-shortener-cp-2
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: url-shortener-cp-2
+  bgpInstances:
+    - name: main
+      localASN: 65202
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.217.2"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-url-shortener-cp-3
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: url-shortener-cp-3
+  bgpInstances:
+    - name: main
+      localASN: 65203
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.217.6"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-url-shortener-worker-1
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: url-shortener-worker-1
+  bgpInstances:
+    - name: main
+      localASN: 65204
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.217.8"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-url-shortener-worker-2
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: url-shortener-worker-2
+  bgpInstances:
+    - name: main
+      localASN: 65205
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.217.10"
+          peerConfigRef:
+            name: mikrotik-peer-config
+
+---
+apiVersion: cilium.io/v2alpha1
+kind: CiliumBGPClusterConfig
+metadata:
+  name: bgp-url-shortener-worker-3
+spec:
+  nodeSelector:
+    matchLabels:
+      kubernetes.io/hostname: url-shortener-worker-3
+  bgpInstances:
+    - name: main
+      localASN: 65206
+      peers:
+        - name: mikrotik
+          peerASN: 64513
+          peerAddress: "10.0.217.12"
           peerConfigRef:
             name: mikrotik-peer-config
 

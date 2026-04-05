@@ -64,6 +64,11 @@ Cilium is deployed as a multi-source ArgoCD Application (same pattern as MetalLB
 
 Testing overrides via kustomize patches adjust IP pools, ASN, peer addresses, and the Kubernetes API VIP.
 
+The production networking model that followed from this migration is described in:
+
+- [ADR-0017](0017-routed-31-per-node-bgp-topology.md) for the routed per-node `/31` and BGP topology
+- [ADR-0018](0018-cilium-managed-api-vip-with-kubeprism.md) for the Cilium-managed external API VIP and kubePrism node-local API access model
+
 ### Rollout Strategy
 
 Testing cluster first, production later. Cilium is bootstrapped via Helm CLI during the initial migration (since removing Flannel kills pod networking, including ArgoCD), then handed off to ArgoCD by deleting the Helm release secret and syncing the ArgoCD app.
@@ -81,3 +86,4 @@ Testing cluster first, production later. Cilium is bootstrapped via Helm CLI dur
 - **CoreDNS upstream DNS**: Removing Flannel breaks CoreDNS's default `forward . /etc/resolv.conf` path because Talos's link-local DNS proxy (`169.254.116.108`) is no longer reachable. The CoreDNS ConfigMap must be overridden to forward directly to `1.1.1.1` / `8.8.8.8`. This is managed via `k8s/infra/cilium/coredns-configmap.yaml` and must be applied immediately after Cilium installation during migration
 - **Talos-specific Helm values**: Cilium on Talos requires `cgroup.autoMount.enabled=false`, `cgroup.hostRoot=/sys/fs/cgroup`, explicit `securityContext.capabilities`, and `routingMode=native` (DSR is incompatible with VXLAN tunneling)
 - **MetalLB on production**: Production retains MetalLB until the production migration is completed
+- **Follow-on decisions**: The concrete production routed topology and API access model are documented separately in ADR-0017 and ADR-0018 rather than being embedded here

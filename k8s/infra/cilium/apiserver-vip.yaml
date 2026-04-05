@@ -1,0 +1,31 @@
+apiVersion: cilium.io/v2alpha1
+kind: CiliumLoadBalancerIPPool
+metadata:
+  name: apiserver-vip-pool
+spec:
+  blocks:
+    - cidr: "10.0.217.5/32"
+  serviceSelector:
+    matchLabels:
+      io.kubernetes.service.name: apiserver-vip
+      io.kubernetes.service.namespace: kube-system
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apiserver-vip
+  namespace: kube-system
+  annotations:
+    lbipam.cilium.io/ips: "10.0.217.5"
+spec:
+  type: LoadBalancer
+  loadBalancerIP: 10.0.217.5
+  externalTrafficPolicy: Local
+  ports:
+    - name: https
+      port: 6443
+      targetPort: 6443
+      protocol: TCP
+  selector:
+    component: kube-apiserver
