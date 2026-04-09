@@ -1,3 +1,0 @@
-{{- include "portfolio.service" (dict "root" . "component" "frontend" "values" .Values.frontend) }}
----
-{{ include "portfolio.service" (dict "root" . "component" "backend" "values" .Values.backend) }}

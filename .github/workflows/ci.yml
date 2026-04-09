@@ -39,8 +39,9 @@ jobs:
 
       - name: Lint Helm charts
         run: |
-          for chart in charts/*/; do
-            [ -d "$chart" ] || continue
+          [ -d charts ] || exit 0
+          find charts -mindepth 2 -maxdepth 2 -name Chart.yaml -print0 2>/dev/null | while IFS= read -r -d '' chart_file; do
+            chart="$(dirname "$chart_file")"
             echo "--- Linting $chart ---"
             helm lint "$chart"
           done
@@ -61,8 +62,9 @@ jobs:
 
       - name: Validate rendered Helm templates
         run: |
-          for chart in charts/*/; do
-            [ -d "$chart" ] || continue
+          [ -d charts ] || exit 0
+          find charts -mindepth 2 -maxdepth 2 -name Chart.yaml -print0 2>/dev/null | while IFS= read -r -d '' chart_file; do
+            chart="$(dirname "$chart_file")"
             echo "--- Validating rendered templates: $chart ---"
             helm template "$chart" | kubeconform \
               -kubernetes-version 1.32.0 \

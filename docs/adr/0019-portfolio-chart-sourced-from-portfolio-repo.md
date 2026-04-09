@@ -47,4 +47,4 @@ This ADR supersedes the `portfolio`-specific parts of [ADR-0009](0009-portfolio-
 - `gitops` keeps a cleaner role as environment orchestrator rather than application release repository
 - Testing can validate `portfolio/testing` end to end before the same change is promoted to `main`
 - The Argo CD configuration is slightly more complex because the Application sources manifests from a different repository than the one that defines the Application object
-- The old local chart and `portfolio` Image Updater configuration become legacy artifacts and should be removed after production cutover is complete
+- The old local chart and `portfolio` Image Updater configuration are removed from this repository once production cutover is complete
