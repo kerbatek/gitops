@@ -8,15 +8,20 @@ metadata:
 spec:
   project: default
   source:
-    repoURL: https://github.com/kerbatek/gitops.git
+    repoURL: https://github.com/kerbatek/portfolio.git
     targetRevision: main
-    path: charts/portfolio
+    path: deploy/helm/portfolio
     helm:
       valuesObject:
         frontend:
           replicas: 3
         backend:
           replicas: 3
+        ingress:
+          host: mrembiasz.pl
+          tls:
+            secretName: portfolio-tls
+            clusterIssuer: letsencrypt-prod
   destination:
     server: https://kubernetes.default.svc
     namespace: portfolio
