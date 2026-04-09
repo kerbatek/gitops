@@ -16,7 +16,7 @@ This directory contains Architecture Decision Records (ADRs) for the gitops repo
 | [ADR-0008](0008-kubeconform-ci-pipeline.md) | Kubeconform CI Pipeline for Manifest Validation | Accepted |
 | [ADR-0009](0009-portfolio-helm-chart-deployment.md) | Portfolio as Local Helm Chart Deployment | Superseded by ADR-0019 |
 | [ADR-0010](0010-filebrowser-for-file-sharing.md) | Filebrowser for File Sharing | Accepted |
-| [ADR-0011](0011-argocd-image-updater.md) | ArgoCD Image Updater for Automated Image Promotion | Accepted (portfolio superseded by ADR-0019) |
+| [ADR-0011](0011-argocd-image-updater.md) | ArgoCD Image Updater for Automated Image Promotion | Superseded by ADR-0019 |
 | [ADR-0012](0012-portfolio-split-frontend-backend.md) | Split Portfolio into Separate Frontend and Backend Deployments | Accepted |
 | [ADR-0013](0013-kube-prometheus-stack-monitoring.md) | Kube-Prometheus-Stack Monitoring | Accepted |
 | [ADR-0014](0014-sealed-secrets-for-secret-management.md) | Sealed Secrets for Secret Management | Accepted |

@@ -2,7 +2,7 @@
 
 ## Status
 
-Accepted (superseded for `portfolio` by [ADR-0019](0019-portfolio-chart-sourced-from-portfolio-repo.md))
+Superseded by [ADR-0019](0019-portfolio-chart-sourced-from-portfolio-repo.md)
 
 ## Context
 
@@ -19,7 +19,7 @@ Additionally, the App of Apps pattern (ADR-0002) with `selfHeal: true` on the ro
 
 We will deploy **ArgoCD Image Updater** (v1.1.0, chart v1.1.1) as a pull-based image promotion controller with **git write-back**.
 
-For the `portfolio` application specifically, this decision has been replaced by the branch-coupled chart promotion flow described in [ADR-0019](0019-portfolio-chart-sourced-from-portfolio-repo.md). Image Updater remains available for workloads that still prefer pull-based promotion with git write-back into this repository.
+For the `portfolio` application specifically, this decision was later replaced by the branch-coupled chart promotion flow described in [ADR-0019](0019-portfolio-chart-sourced-from-portfolio-repo.md). After that migration completed, the Image Updater deployment and its `portfolio` configuration were removed from this repository. This ADR is retained as historical context for the abandoned pull-based promotion approach.
 
 Key configuration:
 
@@ -44,6 +44,6 @@ Required secrets (managed via Sealed Secrets — see [ADR-0014](0014-sealed-secr
 - Git remains the single source of truth — write-back commits `.argocd-source-<app>.yaml` files that ArgoCD reads as Helm parameter overrides
 - Compatible with App of Apps self-heal — no `ignoreDifferences` workarounds needed
 - Introduces a new in-cluster component (Image Updater) that requires maintenance and monitoring
-- Two secrets (`ghcr-creds`, `git-creds`) are managed via Sealed Secrets and stored encrypted in git under `k8s/infra/secrets/argocd/`
+- Two secrets (`ghcr-creds`, `git-creds`) were managed via Sealed Secrets and stored encrypted in git under `k8s/infra/secrets/argocd/`
 - Replaces the push-model image bumping described in ADR-0009 for workloads that opt into Image Updater
-- `portfolio` now follows a different model: its application repository updates the chart on the tracked branch, and ArgoCD consumes that chart directly
+- The repository no longer runs this component after the `portfolio` migration; the decision remains documented only as historical context

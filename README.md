@@ -27,7 +27,6 @@ k8s/
     app-of-apps.yaml          # Production root Argo CD Application
     apps/                     # Base child Applications and shared valuesObject defaults
   infra/
-    argocd-image-updater/     # Image updater config for workloads that still use write-back
     cert-manager/             # ClusterIssuer manifests
     cilium/                   # Cilium BGP and DNS-related manifests
     filebrowser/              # Filebrowser manifests
@@ -45,7 +44,6 @@ k8s/
 The current Argo CD application set includes:
 
 - `argocd`: self-managed Argo CD installation
-- `argocd-image-updater`: automated image promotion controller for workloads that still use Git write-back
 - `cert-manager`: Let's Encrypt certificate management
 - `cilium`: CNI, kube-proxy replacement, BGP control plane, and LoadBalancer IP management
 - `filebrowser`: web-based file access service
@@ -97,7 +95,7 @@ The portfolio workload is defined in the `portfolio` repository and orchestrated
 - This repo keeps environment-specific overrides such as ingress hosts, TLS settings, and replica counts
 - The chart deploys separate `frontend` and `backend` workloads using images from `ghcr.io/kerbatek/portfolio-frontend` and `ghcr.io/kerbatek/portfolio-backend`
 
-Portfolio releases are branch-coupled: the `portfolio` repository updates the chart on the same branch that built the images, and Argo CD reacts to the resulting Git revision change. Legacy `portfolio` Image Updater manifests may remain in this repository during migration cleanup, but they are no longer the intended promotion path.
+Portfolio releases are branch-coupled: the `portfolio` repository updates the chart on the same branch that built the images, and Argo CD reacts to the resulting Git revision change.
 
 ## Documentation
 
