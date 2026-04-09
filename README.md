@@ -18,9 +18,6 @@ Both environments now run on routed per-node `/31` links with Cilium BGP, while 
 ## Repository Layout
 
 ```text
-charts/
-  portfolio/                  # Local Helm chart for the portfolio app
-
 docs/
   adr/                        # Architecture Decision Records
   runbooks/                   # Operational runbooks
@@ -28,9 +25,9 @@ docs/
 k8s/
   argocd/
     app-of-apps.yaml          # Production root Argo CD Application
-    apps/                     # Base child Applications
+    apps/                     # Base child Applications and shared valuesObject defaults
   infra/
-    argocd-image-updater/     # Image updater config
+    argocd-image-updater/     # Image updater config for workloads that still use write-back
     cert-manager/             # ClusterIssuer manifests
     cilium/                   # Cilium BGP and DNS-related manifests
     filebrowser/              # Filebrowser manifests
@@ -48,14 +45,14 @@ k8s/
 The current Argo CD application set includes:
 
 - `argocd`: self-managed Argo CD installation
-- `argocd-image-updater`: automated image tag updates for the portfolio app
+- `argocd-image-updater`: automated image promotion controller for workloads that still use Git write-back
 - `cert-manager`: Let's Encrypt certificate management
 - `cilium`: CNI, kube-proxy replacement, BGP control plane, and LoadBalancer IP management
 - `filebrowser`: web-based file access service
 - `ingress-nginx`: ingress controller
 - `kube-prometheus-stack`: Prometheus, Alertmanager, and Grafana
 - `longhorn`: persistent block storage
-- `portfolio`: local Helm chart deploying frontend and backend workloads
+- `portfolio`: Helm chart sourced from the `portfolio` repository, with environment overrides applied from this repo
 - `sealed-secrets`: Bitnami Sealed Secrets controller
 - `secrets`: sealed secret manifests applied from this repo
 
@@ -91,12 +88,16 @@ Notable testing overrides currently include:
 
 ## Portfolio Application
 
-The portfolio workload is deployed from the local Helm chart in `charts/portfolio`.
+The portfolio workload is defined in the `portfolio` repository and orchestrated from this repository.
 
-- Separate `frontend` and `backend` deployments
-- Images pulled from `ghcr.io/kerbatek/portfolio-frontend` and `ghcr.io/kerbatek/portfolio-backend`
-- Ingress managed through `ingress-nginx`
-- Image tags can be updated automatically by Argo CD Image Updater via `k8s/infra/argocd-image-updater/portfolio.yaml`
+- Base Argo CD application: `k8s/argocd/apps/portfolio.yaml`
+- Chart source: `https://github.com/kerbatek/portfolio.git`, path `deploy/helm/portfolio`
+- Production tracks `portfolio/main`
+- Testing overlays patch the same Application to track `portfolio/testing`
+- This repo keeps environment-specific overrides such as ingress hosts, TLS settings, and replica counts
+- The chart deploys separate `frontend` and `backend` workloads using images from `ghcr.io/kerbatek/portfolio-frontend` and `ghcr.io/kerbatek/portfolio-backend`
+
+Portfolio releases are branch-coupled: the `portfolio` repository updates the chart on the same branch that built the images, and Argo CD reacts to the resulting Git revision change. Legacy `portfolio` Image Updater manifests may remain in this repository during migration cleanup, but they are no longer the intended promotion path.
 
 ## Documentation
 

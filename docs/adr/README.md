@@ -14,9 +14,9 @@ This directory contains Architecture Decision Records (ADRs) for the gitops repo
 | [ADR-0006](0006-cert-manager-with-lets-encrypt.md) | Cert-Manager with Let's Encrypt for TLS | Accepted |
 | [ADR-0007](0007-longhorn-for-persistent-storage.md) | Longhorn for Persistent Storage | Accepted |
 | [ADR-0008](0008-kubeconform-ci-pipeline.md) | Kubeconform CI Pipeline for Manifest Validation | Accepted |
-| [ADR-0009](0009-portfolio-helm-chart-deployment.md) | Portfolio as Local Helm Chart Deployment | Accepted |
+| [ADR-0009](0009-portfolio-helm-chart-deployment.md) | Portfolio as Local Helm Chart Deployment | Superseded by ADR-0019 |
 | [ADR-0010](0010-filebrowser-for-file-sharing.md) | Filebrowser for File Sharing | Accepted |
-| [ADR-0011](0011-argocd-image-updater.md) | ArgoCD Image Updater for Automated Image Promotion | Accepted |
+| [ADR-0011](0011-argocd-image-updater.md) | ArgoCD Image Updater for Automated Image Promotion | Accepted (portfolio superseded by ADR-0019) |
 | [ADR-0012](0012-portfolio-split-frontend-backend.md) | Split Portfolio into Separate Frontend and Backend Deployments | Accepted |
 | [ADR-0013](0013-kube-prometheus-stack-monitoring.md) | Kube-Prometheus-Stack Monitoring | Accepted |
 | [ADR-0014](0014-sealed-secrets-for-secret-management.md) | Sealed Secrets for Secret Management | Accepted |
@@ -24,6 +24,7 @@ This directory contains Architecture Decision Records (ADRs) for the gitops repo
 | [ADR-0016](0016-cilium-replaces-flannel-metallb-kube-proxy.md) | Cilium Replaces Flannel, MetalLB, and kube-proxy | Accepted |
 | [ADR-0017](0017-routed-31-per-node-bgp-topology.md) | Routed /31 Per-Node BGP Topology | Accepted |
 | [ADR-0018](0018-cilium-managed-api-vip-with-kubeprism.md) | Cilium-Managed API VIP with kubePrism | Accepted |
+| [ADR-0019](0019-portfolio-chart-sourced-from-portfolio-repo.md) | Portfolio Chart Sourced from the Portfolio Repository | Accepted |
 
 ## Creating a New ADR
 
