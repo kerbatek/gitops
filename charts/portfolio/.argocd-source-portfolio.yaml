@@ -10,5 +10,5 @@ helm:
     value: ghcr.io/kerbatek/portfolio-backend
     forcestring: true
   - name: backend.image.tag
-    value: sha-2356e1d
+    value: sha-6aece2c
     forcestring: true
