@@ -25,6 +25,7 @@ This directory contains Architecture Decision Records (ADRs) for the gitops repo
 | [ADR-0017](0017-routed-31-per-node-bgp-topology.md) | Routed /31 Per-Node BGP Topology | Accepted |
 | [ADR-0018](0018-cilium-managed-api-vip-with-kubeprism.md) | Cilium-Managed API VIP with kubePrism | Accepted |
 | [ADR-0019](0019-portfolio-chart-sourced-from-portfolio-repo.md) | Portfolio Chart Sourced from the Portfolio Repository | Accepted |
+| [ADR-0020](0020-vaultwarden-deployment-model.md) | Vaultwarden Deployment Model | Accepted |
 
 ## Creating a New ADR
 

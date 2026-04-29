@@ -1,0 +1,21 @@
+resources:
+  - ../../../../infra/vaultwarden
+
+patches:
+  - target:
+      kind: Ingress
+      name: vaultwarden
+    patch: |-
+      - op: replace
+        path: /spec/rules/0/host
+        value: vault.testing.mrembiasz.pl
+      - op: replace
+        path: /spec/tls
+        value: []
+  - target:
+      kind: PersistentVolumeClaim
+      name: vaultwarden-data
+    patch: |-
+      - op: replace
+        path: /spec/resources/requests/storage
+        value: "2Gi"
