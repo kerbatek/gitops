@@ -12,3 +12,12 @@ spec:
             hosts:
               - grafana.testing.mrembiasz.pl
             tls: []
+        prometheus:
+          prometheusSpec:
+            retention: 3d
+            storageSpec:
+              volumeClaimTemplate:
+                spec:
+                  resources:
+                    requests:
+                      storage: 5Gi

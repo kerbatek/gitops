@@ -6,6 +6,7 @@ resources:
   - ../../../argocd/apps/kube-prometheus-stack.yaml
   - ../../../argocd/apps/longhorn.yaml
   - ../../../argocd/apps/cilium.yaml
+  - ../../../argocd/apps/vaultwarden.yaml
   - ../../../argocd/apps/portfolio.yaml
   - ../../../argocd/apps/sealed-secrets.yaml
   - ../../../argocd/apps/secrets.yaml
@@ -16,4 +17,6 @@ patches:
   - path: patches/kube-prometheus-stack.yaml
   - path: patches/cilium.yaml
   - path: patches/filebrowser.yaml
+  - path: patches/vaultwarden.yaml
   - path: patches/portfolio.yaml
+  - path: patches/secrets.yaml
